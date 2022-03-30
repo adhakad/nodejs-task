@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title><%=title%></title>
+
+</head>
+<div class="container">
+  <div class="row">
+    <h2 class="text-center">Update Product Detail  </h2>
+      <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+          <div class="panel panel-info">
+              <div class="panel-heading">
+                  <div class="panel-title"> Product Detail <div style="color: #000;" id="alertField">
+                  </div></div>
+                   </div> 
+              <div class="panel-body">
+                <form id="userForm" class="form-horizontal"  role="form" enctype="multipart/form-data">                          
+                    <input type="hidden" class="form-control" id="product_id" value="<%= data.product_id %>" required>
+                      <label for="product_name" class="col-md-3 control-label">Product Name</label>
+                      <div class="col-md-9">
+                          <input type="text" class="form-control" id="product_name" placeholder="Update and Enter Product Name" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="category_name" class="col-md-3 control-label ">Category Name</label>
+                      <div class="col-md-9">
+                          <input type="text" class="form-control" id="category_name" placeholder="Enter category Name" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price" class="col-md-3 control-label ">Product Price</label>
+                        <div class="col-md-9">
+                            <input type="number" class="form-control" id="price" placeholder="Enter Price" required>
+                        </div>
+                    </div>
+                          <div class="form-group">
+                            <label for="product_id" class="col-md-3 control-label">Product Description</label>
+                            <div class="col-md-9">
+                            <input type="text" class="form-control" id="description" placeholder="Enter Description" required>
+                        </div>
+                    </div>
+                                               
+                    <div class="form-group btn-margin-top">                                        
+                      <div class="col-xs-12">
+                      <input type="submit" name="submit" value="Submit" class="btn btn-primary">   
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>        
+          </div> 
+        </div>
+    </div>
+    
+
+  <script>
+    $( document ).ready(function() {
+      
+        $("#userForm").submit(function(event) {
+       
+        event.preventDefault();
+        ajaxPost();
+      });
+        
+        function ajaxPost(){
+          
+          var formData = {
+            product_id : $("#product_id").val(),
+            product_name : $("#product_name").val(),
+            category_name : $("#category_name").val(),
+            price : $("#price").val(),
+            description : $("#description").val(),
+          }
+          // DO POST
+          $.ajax({
+          method:"post",
+          contentType : "application/json",
+          url : window.location +"/post",
+          data : JSON.stringify(formData),
+          dataType : 'json',
+          success : function(result, xhr) { 
+            $("#alertField").html("<p>"+result.msg+"</p>"); 
+          },
+          error : function(e) {
+              $("#alertField").html("<p>" + "MongoDB Database! <br>" +"</p>");  
+          }
+        }) 
+          // Reset FormData after Posting
+          resetData();
+        }
+        function resetData(){
+           $("#product_id").val("");
+           $("#product_name").val("");
+           $("#category_name").val("");
+           $("#price").val("");
+           $("#description").val("");
+          }
+    })
+    </script>
+ </body>
+ </html>

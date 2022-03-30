@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title><%=title%></title>
+
+    <style>
+        
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+          <h2 class="text-center">Add Product Detail  </h2>
+            <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title"> Product Detail <div style="color: #000;" id="alertField">
+                        </div></div>
+                         </div> 
+                    <div class="panel-body">
+                      <form id="userForm" class="form-horizontal"  role="form" enctype="multipart/form-data">                          
+                        
+                        <div class="form-group">
+                          <label for="product_id" class="col-md-3 control-label">Product Id</label>
+                          <div class="col-md-9">
+                              <input type="number" class="form-control" id="product_id" placeholder="Enter Product Id" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="product_name" class="col-md-3 control-label">Product Name</label>
+                          <div class="col-md-9">
+                              <input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" required>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label for="product_name" class="col-md-3 control-label">Choose Category</label>
+                            <div class="col-md-9">
+                              <select class="form-control select-option" id="category_name">
+                                <option>-------Select Category-------</option>
+                               <% if(data.length > 0){ data.forEach(function(row){ %>
+                                <option value="<%= row.category_name %>"><%= row.category_name %></option>
+                               <%  }) } %>
+                              </select> 
+                              </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="price" class="col-md-3 control-label">Product Price</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="price" placeholder="Enter Price" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-md-3 control-label">Product Description</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" id="description" placeholder="Enter Description" required>
+                            </div>
+                        </div>
+                                                   
+                        <div class="form-group">                                       
+                          <div class="col-md-offset-3 col-md-9">
+                            <input type="submit" name="submit" value="Submit" class="btn btn-primary">   
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>        
+              </div> 
+            </div>
+        </div>
+  
+  <script>
+  $( document ).ready(function() {
+    
+    // SUBMIT FORM
+      $("#userForm").submit(function(event) {
+      // Prevent the form from submitting via the browser.
+      event.preventDefault();
+      ajaxPost();
+    });
+      
+      function ajaxPost(){
+        // PREPARE FORM DATA
+        var formData = {
+          product_id : $("#product_id").val(),
+          product_name : $("#product_name").val(),
+          category_name : $("#category_name").val(),
+          price : $("#price").val(),
+          description : $("#description").val(),
+        }
+        // DO POST
+        $.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : window.location +"/post",
+        data : JSON.stringify(formData),
+        dataType : 'json',
+        success : function(result, xhr) { 
+          $("#alertField").html("<p>"+result.msg+"</p>"); 
+        },
+        error : function(e) {
+            $("#alertField").html("<p>" + "Post Already Exist On MongoDB Database! <br>" +"</p>");  
+        }
+      }) 
+        // Reset FormData after Posting
+        resetData();
+      }
+      function resetData(){
+         $("#product_id").val("");
+         $("#product_name").val("");
+         $("#category_name").val("");
+         $("#price").val("");
+         $("#description").val("");
+        }
+  })
+  </script> 
+               
+</body>
+</html>
